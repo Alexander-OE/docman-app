@@ -10,7 +10,7 @@ const User = () => {
         <Sidebar />
       </div>
       <div className=" ">
-        <div className="flex justify-end ml-[20rem] mr-10 pr-12 rounded  mt-6 border-2 border-solid border-gray-200 ">
+        <div className="flex justify-end ml-[20rem] mr-10 pr-12 rounded  mt-6 border-2 border-solid border-gray-200 max-W-[200px] ">
           {/* {user.firstname} */}
           <h2>Username: <span>John legend</span> </h2>
         </div>
