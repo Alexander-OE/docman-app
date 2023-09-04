@@ -9,38 +9,42 @@ import {
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import axios from "axios";
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
 
-  const loginBtn = async () => {
+  const loginBtn = async (e) => {
+    e.preventDefault()
     const userDetails = {
-      email,
-      password,
+      email:email,
+      password:password,
     };
 
     try {
       // Make a POST request to your authentication API endpoint.
       const response = await axios.post(
-        "https://api.example.com/login",
+        "https://docman-ctvx.onrender.com/auth/users/login",
         userDetails
       );
 
+      console.log(response);
       // Assuming your API returns a token upon successful login.
-      // const { token } = response.data;
+      // const { accessToken } = response.data;
 
       if (response.status === 200) {
         // Save the token in your authentication context or state.
         // This may vary depending on your authentication logic.
         // For example, if you're using a context-based authentication:
 
-        // login(token);
+        login(token);
 
         // Redirect the user to the user dashboard or any desired route.
 
-        const token = response.token;
+        const token = response.accessToken;
+        
         if (!token) {
           alert("Unable to login. Please try after some time.");
           return;
@@ -49,8 +53,8 @@ export function Login() {
         localStorage.setItem("user-token", token);
 
         setTimeout(() => {
-          navigate('/user');
-      }, 500);
+          navigate("/user");
+        }, 500);
         // navigate("/user");
       } else {
         // Handle authentication failure, e.g., show an error message.
@@ -103,7 +107,7 @@ export function Login() {
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button className="mt-6" fullWidth>
+          <Button className="mt-6" fullWidth type="submit">
             Login
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">

@@ -13,16 +13,17 @@ function App() {
       <Route path="/signin" element={<Login />} />
       <Route path="/admin" element={<Admin />} />
 
-  {/* Protected user route below */}
-       <Route
+      {/* Protected user route below */}
+      {/* <Route
         path="/user"
         element={
           <ProtectedRoute>
             <User />
           </ProtectedRoute>
         }
-      /> 
-        
+      /> */}
+
+      <Route path="/user" element={<User />} />
     </Routes>
   );
 }

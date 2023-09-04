@@ -1,0 +1,48 @@
+/* Container for the PDF viewer */
+.pdf-container {
+    width: 100%;
+    max-width: 800px; /* Adjust the maximum width as needed */
+    /* margin: 0 auto;
+     */
+     margin-left: 25rem;
+     margin-top: 4rem;
+    padding: 20px;
+    padding-bottom: 12rem;
+    padding-top: 12rem;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Styling for the PDF viewer */
+  .pdf-document {
+    display: block;
+    margin: 0 auto;
+  }
+  
+  /* Styling for the page number and navigation buttons */
+  .pdf-page-info {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .pdf-page-info p {
+    font-size: 18px;
+  }
+  
+  .pdf-navigation-button {
+    font-size: 16px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .pdf-navigation-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  

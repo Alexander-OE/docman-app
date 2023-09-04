@@ -26,24 +26,17 @@ export function Register() {
     };
     try {
       // Make a POST request to your authentication API endpoint.
-      const response = await axios.post('https://api.example.com/login', userDetails);
+      const response = await axios.post('https://docman-ctvx.onrender.com/users', userDetails);
 
       if (response.status === 200) {
-        // Save the token in your authentication context or state.
-        // This may vary depending on your authentication logic.
-        // For example, if you're using a context-based authentication:
-
-        // login(token);
-
-        // Redirect the user to the user dashboard or any desired route.
         navigate('/signin');
       } else {
-        // Handle authentication failure, e.g., show an error message.
-        console.log('Login failed');
+       
+        console.log('Register failed');
       }
     } catch (error) {
       // Handle any network or request errors.
-      console.error('Login error:', error);
+      console.error('Registration error:', error);
     }
   };
 
