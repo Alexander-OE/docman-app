@@ -9,6 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
+
+
   const login = (userData) => {
     setUser(userData);
     setToken(userData.token); // Assuming userData contains a 'token' property

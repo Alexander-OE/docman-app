@@ -14,16 +14,16 @@ function App() {
       <Route path="/admin" element={<Admin />} />
 
       {/* Protected user route below */}
-      {/* <Route
+      <Route
         path="/user"
         element={
           <ProtectedRoute>
             <User />
           </ProtectedRoute>
         }
-      /> */}
+      />
 
-      <Route path="/user" element={<User />} />
+      {/* <Route path="/user" element={<User />} /> */}
     </Routes>
   );
 }

@@ -8,19 +8,22 @@ import {
 
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Loader from "../../components/loader/Loader";
 import { useState } from "react";
 import axios from "axios";
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
   const loginBtn = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setIsLoading(true);
     const userDetails = {
-      email:email,
-      password:password,
+      email: email,
+      password: password,
     };
 
     try {
@@ -30,27 +33,29 @@ export function Login() {
         userDetails
       );
 
-      console.log(response);
       // Assuming your API returns a token upon successful login.
-      // const { accessToken } = response.data;
 
+      const accessToken = response.data.accessToken;
+
+      console.log(response);
+      console.log("This is the token: " + accessToken);
       if (response.status === 200) {
         // Save the token in your authentication context or state.
         // This may vary depending on your authentication logic.
         // For example, if you're using a context-based authentication:
 
-        login(token);
+        // login(response);
 
         // Redirect the user to the user dashboard or any desired route.
 
-        const token = response.accessToken;
-        
-        if (!token) {
+        const accessToken = response.data.accessToken;
+
+        if (!accessToken) {
           alert("Unable to login. Please try after some time.");
           return;
         }
         localStorage.clear();
-        localStorage.setItem("user-token", token);
+        localStorage.setItem("user-token", accessToken);
 
         setTimeout(() => {
           navigate("/user");
@@ -63,62 +68,68 @@ export function Login() {
     } catch (error) {
       // Handle any network or request errors.
       console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center mt-10" onSubmit={loginBtn}>
-      <Card color="transparent" shadow={false}>
-        <Typography variant="h4" color="blue-gray">
-          Sign In
-        </Typography>
-        <Typography color="gray" className="mt-1 font-normal">
-          Enter your details to Login.
-        </Typography>
-        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-          <div className="mb-4 flex flex-col gap-6">
-            <Input
-              size="lg"
-              label="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              type="password"
-              size="lg"
-              label="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center font-normal"
-              >
-                I agree the
-                <a
-                  href="#"
-                  className="font-medium transition-colors hover:text-gray-900"
-                >
-                  &nbsp;Terms and Conditions
-                </a>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-          />
-          <Button className="mt-6" fullWidth type="submit">
-            Login
-          </Button>
-          <Typography color="gray" className="mt-4 text-center font-normal">
-            Already have an account?{" "}
-            <Link to={"/"} className="font-medium text-gray-900">
-              {" "}
-              Sign Up{" "}
-            </Link>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Card color="transparent" shadow={false}>
+          <Typography variant="h4" color="blue-gray">
+            Sign In
           </Typography>
-        </form>
-      </Card>
+          <Typography color="gray" className="mt-1 font-normal">
+            Enter your details to Login.
+          </Typography>
+          <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+            <div className="mb-4 flex flex-col gap-6">
+              <Input
+                size="lg"
+                label="Email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input
+                type="password"
+                size="lg"
+                label="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <Checkbox
+              label={
+                <Typography
+                  variant="small"
+                  color="gray"
+                  className="flex items-center font-normal"
+                >
+                  I agree the
+                  <a
+                    href="#"
+                    className="font-medium transition-colors hover:text-gray-900"
+                  >
+                    &nbsp;Terms and Conditions
+                  </a>
+                </Typography>
+              }
+              containerProps={{ className: "-ml-2.5" }}
+            />
+            <Button className="mt-6" fullWidth type="submit">
+              Login
+            </Button>
+            <Typography color="gray" className="mt-4 text-center font-normal">
+              Already have an account?{" "}
+              <Link to={"/"} className="font-medium text-gray-900">
+                {" "}
+                Sign Up{" "}
+              </Link>
+            </Typography>
+          </form>
+        </Card>
+      )}
     </div>
   );
 }

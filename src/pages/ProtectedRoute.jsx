@@ -10,6 +10,7 @@ const ProtectedRoute = (props) => {
             return navigate('/signin');
         }
         setIsLoggedIn(true);
+        // navigate("/user")
     }
     useEffect(() => {
             checkUserToken();
