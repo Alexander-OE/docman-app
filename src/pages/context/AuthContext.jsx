@@ -7,18 +7,18 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  // const [token, setToken] = useState(null);
 
+  console.log(user);
 
 
   const login = (userData) => {
     setUser(userData);
-    setToken(userData.token); // Assuming userData contains a 'token' property
   };
 
   const logout = () => {
     setUser(null);
-    setToken(null);
+    // setToken(null);
   };
 
   const isAuthenticated = () => !!user;

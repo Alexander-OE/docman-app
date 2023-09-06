@@ -26,20 +26,20 @@ export function Register() {
     setIsLoading(true);
 
     const userDetails = {
-      firstname: firstname,
-      lastname: lastname,
+      firstName: firstname,
+      lastName: lastname,
       email: email,
       password: Password,
       phoneNumber: Phone,
     };
-    console.log(userDetails);
+    // console.log(userDetails);
     try {
       const response = await axios.post(
         "https://docman-ctvx.onrender.com/users",
         userDetails
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         navigate("/signin");
         alert("Account successfully created! ");
       } else {

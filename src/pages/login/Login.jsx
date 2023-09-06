@@ -9,6 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Loader from "../../components/loader/Loader";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -17,6 +18,7 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const loginBtn = async (e) => {
     e.preventDefault();
@@ -39,32 +41,28 @@ export function Login() {
 
       console.log(response);
       console.log("This is the token: " + accessToken);
-      if (response.status === 200) {
-        // Save the token in your authentication context or state.
-        // This may vary depending on your authentication logic.
-        // For example, if you're using a context-based authentication:
 
-        // login(response);
+      // Save the token in your authentication context or state.
+      // This may vary depending on your authentication logic.
+      // For example, if you're using a context-based authentication:
 
-        // Redirect the user to the user dashboard or any desired route.
+      login(response.data);
 
-        const accessToken = response.data.accessToken;
+      // Redirect the user to the user dashboard or any desired route.
 
-        if (!accessToken) {
-          alert("Unable to login. Please try after some time.");
-          return;
-        }
-        localStorage.clear();
-        localStorage.setItem("user-token", accessToken);
+      // const accessToken = response.data.accessToken;
 
-        setTimeout(() => {
-          navigate("/user");
-        }, 500);
-        // navigate("/user");
-      } else {
-        // Handle authentication failure, e.g., show an error message.
-        console.log("Login failed");
+      if (!accessToken) {
+        alert("Unable to login. Please try after some time.");
+        return;
       }
+      localStorage.clear();
+      localStorage.setItem("user-token", accessToken);
+
+      setTimeout(() => {
+        navigate("/user");
+      }, 500);
+      // navigate("/user");
     } catch (error) {
       // Handle any network or request errors.
       console.error("Login error:", error);
