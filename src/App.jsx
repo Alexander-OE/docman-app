@@ -10,8 +10,8 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Register />} />
-      <Route path="/signin" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/" element={<Login />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/userd" element={<UserDash/>}/>
       {/* Protected user route below */}

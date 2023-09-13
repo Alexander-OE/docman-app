@@ -18,7 +18,7 @@ export function Sidenav() {
 
   const logOutBtn = () => {
     localStorage.removeItem("user-token");
-    navigate("/signin");
+    navigate("/");
   };
 
   return (

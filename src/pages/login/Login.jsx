@@ -128,8 +128,8 @@ export function Login() {
               Login
             </Button>
             <Typography color="gray" className="mt-4 text-center font-normal">
-              Already have an account?{" "}
-              <Link to={"/"} className="font-medium text-gray-900">
+              Don't an account?{" "}
+              <Link to={"/register"} className="font-medium text-gray-900">
                 {" "}
                 Sign Up{" "}
               </Link>

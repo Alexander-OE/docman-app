@@ -175,7 +175,7 @@ export function Register() {
             </Button>
             <Typography color="gray" className="mt-4 text-center font-normal">
               Already have an account?{" "}
-              <Link to={"/signin"} className="font-medium text-gray-900">
+              <Link to={"/"} className="font-medium text-gray-900">
                 {" "}
                 Sign In{" "}
               </Link>
