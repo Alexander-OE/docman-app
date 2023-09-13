@@ -11,7 +11,7 @@ import {
 
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loader from "../../components/loader/Loader";
 import endpoint from "../../assets/endpoint.json"
 
@@ -23,7 +23,8 @@ export function Register() {
   const [Password, setPassword] = useState("");
   const [Phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [department, setDepartment] = useState("")
+  // const [allDepartments, setAllDepartments] = useState([])
+  // const [department, setDepartment] = useState("")
   const navigate = useNavigate();
 
   const registerBtn = async (e) => {
@@ -36,6 +37,7 @@ export function Register() {
       email: email,
       password: Password,
       phoneNumber: Phone,
+      department: "Computer_Science"
     };
     // console.log(userDetails);
     try {
@@ -58,28 +60,40 @@ export function Register() {
     }
   };
 
-  const getDepartments = async () => {
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow"
-    }
+  // const getDepartments = async () => {
+  //   const requestOptions = {
+  //     method: "GET",
+  //     redirect: "follow"
+  //   }
 
-    try{
-      let response = await fetch(`${url}/users`, requestOptions)
-      if (response.status === 200){
-        let data = await response.json()
-        setDepartment(data.department)
-      }
-      else{
-        console.log("Response:", response)
-      }
-    }
-    catch(error){console.log("error:", error)}
-  }
+  //   try{
+  //     let response = await fetch(`${url}/departments`, requestOptions)
+  //     if (response.status === 200){
+  //       let data = await response.json()
+  //       console.log("Data:", data)
+  //       setAllDepartments(data.departments)
+  //     }
+  //     else{
+  //       console.log("Response:", response)
+  //       setAllDepartments([])
+  //     }
+  //   }
+  //   catch(error){
+  //     console.log("error:", error)
+  //     setAllDepartments([])
+  //   }
+  //   console.log("All departments:", allDepartments)
+  // }
 
-  const setDept = (event) => {
-    setDepartment(event.target.value)
-  }
+  // const setDept = () => {
+  //   let dept = document.getElementById("department").value
+  //   setDepartment(dept)
+  //   console.log("Current dept:", department)
+  // }
+
+  // useEffect(() => {
+  //   getDepartments()
+  // }, [])
 
   return (
     <div className="flex flex-col items-center mt-10">
@@ -106,7 +120,7 @@ export function Register() {
               <Input
                 size="lg"
                 label="Last Name"
-                onChange={setDept}
+                onChange={(e) => setLastname(e.target.value)}
               />
               <Input
                 size="lg"
@@ -121,13 +135,15 @@ export function Register() {
               {/* <Select
               id="department"
               label="Department"
-              labelId="Department"
               value={department}
-              onChange={(e) => {setDepartment(e.target.value)}}
+              onChange={setDept}
               >
-                <MenuItem value="">None</MenuItem>
-                <MenuItem value={"CSC"}>CSC</MenuItem>
-                <MenuItem value={"Bio"}>Bio</MenuItem>
+                <Option value="">None</Option>
+                {
+                  allDepartments.map(dept => 
+                    <Option key={dept._id} value={dept.name}>{dept.name}</Option>  
+                  )
+                }
               </Select> */}
               <Input
                 type="password"
