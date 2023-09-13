@@ -79,7 +79,6 @@ export function Register() {
 
   const setDept = (event) => {
     setDepartment(event.target.value)
-    console.log(department)
   }
 
   return (
@@ -107,7 +106,7 @@ export function Register() {
               <Input
                 size="lg"
                 label="Last Name"
-                onChange={(e) => setLastname(e.target.value)}
+                onChange={setDept}
               />
               <Input
                 size="lg"
@@ -119,15 +118,17 @@ export function Register() {
                 label="Phone Number"
                 onChange={(e) => setPhone(e.target.value)}
               />
-              <Select
+              {/* <Select
               id="department"
               label="Department"
               labelId="Department"
               value={department}
               onChange={(e) => {setDepartment(e.target.value)}}
               >
+                <MenuItem value="">None</MenuItem>
                 <MenuItem value={"CSC"}>CSC</MenuItem>
-              </Select>
+                <MenuItem value={"Bio"}>Bio</MenuItem>
+              </Select> */}
               <Input
                 type="password"
                 size="lg"
