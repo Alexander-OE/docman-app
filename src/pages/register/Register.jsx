@@ -4,14 +4,18 @@ import {
   Checkbox,
   Button,
   Typography,
+  Select,
+  MenuItem,
+  Option,
 } from "@material-tailwind/react";
 
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loader from "../../components/loader/Loader";
+import endpoint from "../../assets/endpoint.json"
 
-
+const url = endpoint.url
 export function Register() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -19,6 +23,8 @@ export function Register() {
   const [Password, setPassword] = useState("");
   const [Phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  // const [allDepartments, setAllDepartments] = useState([])
+  // const [department, setDepartment] = useState("")
   const navigate = useNavigate();
 
   const registerBtn = async (e) => {
@@ -31,11 +37,12 @@ export function Register() {
       email: email,
       password: Password,
       phoneNumber: Phone,
+      department: "Computer_Science"
     };
     // console.log(userDetails);
     try {
       const response = await axios.post(
-        "https://docman-ctvx.onrender.com/users",
+        `${url}/users`,
         userDetails
       );
 
@@ -52,6 +59,41 @@ export function Register() {
       setIsLoading(false);
     }
   };
+
+  // const getDepartments = async () => {
+  //   const requestOptions = {
+  //     method: "GET",
+  //     redirect: "follow"
+  //   }
+
+  //   try{
+  //     let response = await fetch(`${url}/departments`, requestOptions)
+  //     if (response.status === 200){
+  //       let data = await response.json()
+  //       console.log("Data:", data)
+  //       setAllDepartments(data.departments)
+  //     }
+  //     else{
+  //       console.log("Response:", response)
+  //       setAllDepartments([])
+  //     }
+  //   }
+  //   catch(error){
+  //     console.log("error:", error)
+  //     setAllDepartments([])
+  //   }
+  //   console.log("All departments:", allDepartments)
+  // }
+
+  // const setDept = () => {
+  //   let dept = document.getElementById("department").value
+  //   setDepartment(dept)
+  //   console.log("Current dept:", department)
+  // }
+
+  // useEffect(() => {
+  //   getDepartments()
+  // }, [])
 
   return (
     <div className="flex flex-col items-center mt-10">
@@ -90,6 +132,19 @@ export function Register() {
                 label="Phone Number"
                 onChange={(e) => setPhone(e.target.value)}
               />
+              {/* <Select
+              id="department"
+              label="Department"
+              value={department}
+              onChange={setDept}
+              >
+                <Option value="">None</Option>
+                {
+                  allDepartments.map(dept => 
+                    <Option key={dept._id} value={dept.name}>{dept.name}</Option>  
+                  )
+                }
+              </Select> */}
               <Input
                 type="password"
                 size="lg"
@@ -120,7 +175,7 @@ export function Register() {
             </Button>
             <Typography color="gray" className="mt-4 text-center font-normal">
               Already have an account?{" "}
-              <Link to={"/signin"} className="font-medium text-gray-900">
+              <Link to={"/"} className="font-medium text-gray-900">
                 {" "}
                 Sign In{" "}
               </Link>
