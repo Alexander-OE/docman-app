@@ -1,12 +1,13 @@
 import DisplayPdf from "./DisplayPdf"
-import { useState } from "react"
-import test from './test.json'
+import { useState, useEffect } from "react"
 import "./Userdash.css"
 
 export default function DisplayDocs({isDocs, docs}){
     const [path, setPath] = useState("https://google.com")
     const changePath = (path) => {setPath(path)}
     const Docs = docs? docs : []
+
+    useEffect(() => {console.log("Refreshed")}, [isDocs])
     
     return(
         <div>
