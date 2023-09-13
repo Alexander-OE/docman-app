@@ -29,24 +29,26 @@ export function Sidenav() {
         </Typography>
       </div>
       <List>
-        <ListItem>
+        <ListItem onClick={() => {navigate('/user')}}>
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
           Dashboard
         </ListItem>
-        <ListItem>
+
+        <ListItem onClick={() => {navigate('/admin')}}>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Profile
+          Admin
         </ListItem>
-        <ListItem>
+
+        {/* <ListItem>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
           Settings
-        </ListItem>
+        </ListItem> */}
         <ListItem onClick={logOutBtn}>
           <ListItemPrefix >
             <PowerIcon className="h-5 w-5" />

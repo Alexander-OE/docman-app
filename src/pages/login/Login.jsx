@@ -12,6 +12,9 @@ import Loader from "../../components/loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import endpoint from "../../assets/endpoint.json"
+
+const url = endpoint.url
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -31,13 +34,16 @@ export function Login() {
     try {
       // Make a POST request to your authentication API endpoint.
       const response = await axios.post(
-        "https://docman-ctvx.onrender.com/auth/users/login",
+        `${url}/auth/users/login`,
         userDetails
       );
 
       // Assuming your API returns a token upon successful login.
 
       const accessToken = response.data.accessToken;
+      const docs = response.data.documents
+      const firstname = response.data.firstName
+      const email = response.data.email
 
       console.log(response);
       console.log("This is the token: " + accessToken);
@@ -58,6 +64,9 @@ export function Login() {
       }
       localStorage.clear();
       localStorage.setItem("user-token", accessToken);
+      localStorage.setItem("docs", JSON.stringify(docs))
+      localStorage.setItem("firstname", firstname)
+      localStorage.setItem("email", email)
 
       setTimeout(() => {
         navigate("/user");

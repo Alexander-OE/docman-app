@@ -18,11 +18,11 @@ function DisplayPdf(url) {
   }
 
   return (
-    <div className="w-11/12 max-w-6xl m-auto p-4 bg-gray-300 relative pdfDiv">
+    <div className="w-11/12 max-w-6xl rounded-lg m-auto p-4 bg-gray-300 relative pdfDiv">
       <Document
       file={url}
       onLoadSuccess={onDocumentLoadSuccess}
-      className="pdf h-pdf overflow-scroll flex"
+      className="pdf h-pdf overflow-scroll flex justify-center"
       >
         <Page pageNumber={pageNumber} width={document.querySelector(".pdfDiv")?.clientWidth * 0.9 ?? 100} />
       </Document>

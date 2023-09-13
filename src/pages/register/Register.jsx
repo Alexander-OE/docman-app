@@ -4,14 +4,18 @@ import {
   Checkbox,
   Button,
   Typography,
+  Select,
+  MenuItem,
+  Option,
 } from "@material-tailwind/react";
 
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import Loader from "../../components/loader/Loader";
+import endpoint from "../../assets/endpoint.json"
 
-
+const url = endpoint.url
 export function Register() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -19,6 +23,7 @@ export function Register() {
   const [Password, setPassword] = useState("");
   const [Phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [department, setDepartment] = useState("")
   const navigate = useNavigate();
 
   const registerBtn = async (e) => {
@@ -35,7 +40,7 @@ export function Register() {
     // console.log(userDetails);
     try {
       const response = await axios.post(
-        "https://docman-ctvx.onrender.com/users",
+        `${url}/users`,
         userDetails
       );
 
@@ -52,6 +57,30 @@ export function Register() {
       setIsLoading(false);
     }
   };
+
+  const getDepartments = async () => {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    }
+
+    try{
+      let response = await fetch(`${url}/users`, requestOptions)
+      if (response.status === 200){
+        let data = await response.json()
+        setDepartment(data.department)
+      }
+      else{
+        console.log("Response:", response)
+      }
+    }
+    catch(error){console.log("error:", error)}
+  }
+
+  const setDept = (event) => {
+    setDepartment(event.target.value)
+    console.log(department)
+  }
 
   return (
     <div className="flex flex-col items-center mt-10">
@@ -90,6 +119,15 @@ export function Register() {
                 label="Phone Number"
                 onChange={(e) => setPhone(e.target.value)}
               />
+              <Select
+              id="department"
+              label="Department"
+              labelId="Department"
+              value={department}
+              onChange={(e) => {setDepartment(e.target.value)}}
+              >
+                <MenuItem value={"CSC"}>CSC</MenuItem>
+              </Select>
               <Input
                 type="password"
                 size="lg"

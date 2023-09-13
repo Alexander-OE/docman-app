@@ -3,32 +3,26 @@ import { useState } from "react"
 import test from './test.json'
 import "./Userdash.css"
 
-export default function DisplayDocs(isDocs){
+export default function DisplayDocs({isDocs, docs}){
     const [path, setPath] = useState("https://google.com")
     const changePath = (path) => {setPath(path)}
-    const Docs = []
+    const Docs = docs? docs : []
     
     return(
         <div>
             <table className="w-full">
                 <thead>
                     <tr className="py-3 h-10 bg-blue-gray-50 border-b border-blue-gray-100 text-blue-gray-600">
-                        <th className="w-1/4 px-3">Name</th>
-                        <th className="w-1/4 px-3">Id</th>
-                        <th className="w-1/4 px-3">Date created</th>
-                        <th className="w-1/4 px-3"></th>
+                        <th className="px-3">Name</th>
+                        <th className="px-3">Id</th>
+                        <th className="px-3">Date created</th>
+                        <th className="w-36 px-3"></th>
                     </tr>
                 </thead>
 
                 <tbody>
                 {isDocs && Docs.map(doc => 
-                    // <tr key={doc._id} className="py-3 px-2 h-10 border-b border-blue-gray-100 text-center text-blue-gray-500">
-                    //     <td className="overflow-x-hidden px-2">{doc.name}</td>
-                    //     <td className="overflow-x-hidden px-2">{doc._id}</td>
-                    //     <td className="overflow-x-hidden px-2">{doc.createdAt}</td>
-                    //     <td className="overflow-x-hidden px-2"><button onClick={() => {display(doc.path)}}>View</button></td>
-                    // </tr>
-                    <TableRow doc={doc} setPath={changePath}/>
+                    <TableRow key={doc._id} doc={doc} setPath={changePath}/>
                 )}
                 </tbody>
             </table>
