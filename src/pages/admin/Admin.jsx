@@ -12,7 +12,7 @@ import endpoint from "../../assets/endpoint.json"
 const url = endpoint.url
 const Admin = () => {
 
-  const [areDocsAvailable, setDocAvailability] = useState(false)
+  const [areDocsAvailable, setDocAvailability] = useState(true)
   const [docs, setDocs] = useState(null)
   const [users, setUsers] = useState([])
 
@@ -39,9 +39,40 @@ const Admin = () => {
       }
     }
     catch(error){console.log("error:", error)}
+
+    console.log("Successfully gotten users!")
   }
 
-  useEffect(() => {getRegisteredUsers()}, [])
+  
+  
+  async function getAllDocs() {
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("user-token")} backend`
+      }
+    }
+  
+    try{
+      let response = await fetch(`${url}/getAllDocs`,requestOptions)
+      if (response.status == 201){
+        let data = await response.json()
+        localStorage.setItem("docs", JSON.stringify(data.Documents))
+        setDocs(JSON.parse(localStorage.getItem("docs")))
+        console.log(localStorage.getItem('docs'))
+      }
+      else{
+        console.log("Fetch documents failed!")
+      }
+    }
+    catch(error){console.log("error:", error)}
+  }
+
+  useEffect(() => {
+    getRegisteredUsers()
+    getAllDocs()
+  }, [])
 
   return (
     <section className="w-full min-h-screen relative box-border">

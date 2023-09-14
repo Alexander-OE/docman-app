@@ -1,7 +1,7 @@
 import { Sidenav } from "../../components/sidenav/Sidenav";
 import { useAuth } from "../context/AuthContext";
 import Form from "../../components/dashboard/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DisplayDocs from "./DisplayDocs";
 import DashboardHead from "../../components/dashboard/header";
 import Loader from '../../components/loader/Loader'
@@ -12,9 +12,34 @@ const url = endpoint.url
 
 const UserDash = () => {
   const { user } = useAuth();
-
+  
   const [areDocsAvailable, setDocAvailability] = useState(false)
   const [docs, setDocs] = useState(null)
+  
+  async function getAllDocs() {
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        authorization: `Bearer ${localStorage.getItem("user-token")} backend`
+      }
+    }
+  
+    try{
+      let response = await fetch(`${url}/getAllDocs`,requestOptions)
+      if (response.status == 201){
+        let data = await response.json()
+        localStorage.setItem("docs", JSON.stringify(data.Documents))
+        setDocs(JSON.parse(localStorage.getItem("docs")))
+        console.log(localStorage.getItem('docs'))
+      }
+      else{
+        console.log("Fetch documents failed!")
+      }
+    }
+    catch(error){console.log("error:", error)}
+  }
+  useEffect(() => {getAllDocs()}, [])
 
   return (
     <section className="w-full min-h-screen relative box-border">

@@ -5,7 +5,6 @@ import {
   Button,
   Typography,
   Select,
-  MenuItem,
   Option,
 } from "@material-tailwind/react";
 
@@ -23,8 +22,8 @@ export function Register() {
   const [Password, setPassword] = useState("");
   const [Phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const [allDepartments, setAllDepartments] = useState([])
-  // const [department, setDepartment] = useState("")
+  const [allDepartments, setAllDepartments] = useState([])
+  const [department, setDepartment] = useState(null)
   const navigate = useNavigate();
 
   const registerBtn = async (e) => {
@@ -37,17 +36,18 @@ export function Register() {
       email: email,
       password: Password,
       phoneNumber: Phone,
-      department: "Computer_Science"
+      departmentName: department
     };
     // console.log(userDetails);
     try {
+      console.log(userDetails)
       const response = await axios.post(
         `${url}/users`,
         userDetails
       );
 
       if (response.status === 201) {
-        navigate("/signin");
+        navigate("/");
         alert("Account successfully created! ");
       } else {
         console.log("Register failed");
@@ -60,40 +60,42 @@ export function Register() {
     }
   };
 
-  // const getDepartments = async () => {
-  //   const requestOptions = {
-  //     method: "GET",
-  //     redirect: "follow"
-  //   }
+  const getDepartments = async () => {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    }
 
-  //   try{
-  //     let response = await fetch(`${url}/departments`, requestOptions)
-  //     if (response.status === 200){
-  //       let data = await response.json()
-  //       console.log("Data:", data)
-  //       setAllDepartments(data.departments)
-  //     }
-  //     else{
-  //       console.log("Response:", response)
-  //       setAllDepartments([])
-  //     }
-  //   }
-  //   catch(error){
-  //     console.log("error:", error)
-  //     setAllDepartments([])
-  //   }
-  //   console.log("All departments:", allDepartments)
-  // }
+    try{
+      let response = await fetch(`${url}/departments`, requestOptions)
+      if (response.status === 200){
+        let data = await response.json()
+        console.log("Data:", data)
+        setAllDepartments(data.departments)
+      }
+      else{
+        console.log("Response:", response)
+        setAllDepartments([])
+      }
+    }
+    catch(error){
+      console.log("error:", error)
+      setAllDepartments([])
+    }
+    console.log("All departments:", allDepartments)
+  }
 
-  // const setDept = () => {
-  //   let dept = document.getElementById("department").value
-  //   setDepartment(dept)
-  //   console.log("Current dept:", department)
-  // }
+  const setDept = (dept) => {
+    // let dept = document.getElementById("department").value
+    setDepartment(dept)
+    console.log("Current dept:", department)
+  }
 
-  // useEffect(() => {
-  //   getDepartments()
-  // }, [])
+  useEffect(() => {
+    getDepartments()
+  }, [])
+
+  const no = {name: 'None', value: ""}
 
   return (
     <div className="flex flex-col items-center mt-10">
@@ -132,19 +134,19 @@ export function Register() {
                 label="Phone Number"
                 onChange={(e) => setPhone(e.target.value)}
               />
-              {/* <Select
+              <Select
               id="department"
               label="Department"
               value={department}
               onChange={setDept}
               >
-                <Option value="">None</Option>
+                <Option value={no.value}>{no.name}</Option>
                 {
                   allDepartments.map(dept => 
                     <Option key={dept._id} value={dept.name}>{dept.name}</Option>  
                   )
                 }
-              </Select> */}
+              </Select>
               <Input
                 type="password"
                 size="lg"

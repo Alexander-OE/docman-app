@@ -77,6 +77,10 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
               const data = await response.json()
               console.log("401-message:", data.message)
             }
+
+            else if (response.status == 403){
+              alert("Not an admin, cannot upload documents")
+            }
             
             else if (response.status == 503){
                 alert("Service unavailable, try again later!")
