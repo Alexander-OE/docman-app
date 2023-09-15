@@ -7,7 +7,15 @@ module.exports = withMT({
     "path-to-your-node_modules/@material-tailwind/react/theme/components/**/*.{js,ts,jsx,tsx}",
 ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'chevron-down': "url('/chevron-down.png')",
+        'chevron-up': "url('/chevron-up.png')"
+      },
+      backgroundSize: {
+        'sm': '16px'
+      }
+    },
   },
   plugins: [],
 });

@@ -7,7 +7,7 @@ import {
   Select,
   Option,
 } from "@material-tailwind/react";
-
+import Dropdown from "../../components/dropdown/Dropdown";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -97,6 +97,8 @@ export function Register() {
 
   const no = {name: 'None', value: ""}
 
+  const mockdept = [{name: "Computer Science"}, {name: "Botany"}, {name: "Cybersecurity"}]
+
   return (
     <div className="flex flex-col items-center mt-10">
       {isLoading ? (
@@ -134,7 +136,7 @@ export function Register() {
                 label="Phone Number"
                 onChange={(e) => setPhone(e.target.value)}
               />
-              <Select
+              {/* <Select
               id="department"
               label="Department"
               value={department}
@@ -146,7 +148,8 @@ export function Register() {
                     <Option key={dept._id} value={dept.name}>{dept.name}</Option>  
                   )
                 }
-              </Select>
+              </Select> */}
+              <Dropdown label="Department" choices={allDepartments} setChoice={setDepartment}/>
               <Input
                 type="password"
                 size="lg"

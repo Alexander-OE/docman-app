@@ -63,6 +63,8 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
               authorization: `Bearer ${localStorage.getItem("user-token")} backend`
             }
           };
+
+          console.log(data)
     
           try{
             let response = await fetch(`${url}/upload`, requestOptions)
