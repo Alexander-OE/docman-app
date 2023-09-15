@@ -49,12 +49,16 @@ export function Register() {
       if (response.status === 201) {
         navigate("/");
         alert("Account successfully created! ");
-      } else {
+      } 
+      else {
         console.log("Register failed");
       }
     } catch (error) {
       // Handle any network or request errors.
       console.error("Registration error:", error);
+      if (/409/.test(error.message)){
+        alert("Choose a valid department!")
+      }
     } finally {
       setIsLoading(false);
     }
