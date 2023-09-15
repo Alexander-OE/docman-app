@@ -36,7 +36,7 @@ export default function Dropdown({label, choices, setChoice}){
     return(
         <>
         <div className="drop-disp relative hover:cursor-pointer">
-            <p onClick={chooseAction} className="p-3 border-[1px] border-blue-gray-200 rounded-md text-blue-gray-700 choice-name bg-chevron-down bg-sm bg-no-repeat bg-[95%]">{selected}</p>
+            <p onClick={chooseAction} className="p-3 border-[1px] border-blue-gray-200 rounded-md text-blue-gray-700 choice-name bg-chevron-down bg-sm bg-no-repeat bg-[95%] opacity-90 text-sm">{selected}</p>
 
             <label className="label hidden text-[11px] absolute -top-1.5 left-3 px-1 bg-white">{label}</label>
 
