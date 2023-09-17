@@ -31,7 +31,6 @@ const UserDash = () => {
         let data = await response.json()
         localStorage.setItem("docs", JSON.stringify(data.Documents))
         setDocs(JSON.parse(localStorage.getItem("docs")))
-        console.log(localStorage.getItem('docs'))
       }
       else{
         console.log("Fetch documents failed!")
@@ -39,6 +38,7 @@ const UserDash = () => {
     }
     catch(error){console.log("error:", error)}
   }
+  
   useEffect(() => {getAllDocs()}, [])
 
   return (
@@ -50,26 +50,6 @@ const UserDash = () => {
       <div className="board ml-auto flex-grow z-10">
         <DashboardHead/>
 
-        {/* Heading */}
-        {/* <h2 className="text-4xl text-blue-gray-800 font-bold my-5 mx-4">Upload documents</h2>
-        
-        <div className="mx-auto my-10 p-5 max-w-sm hover:cursor-pointer">
-          <form onSubmit={onsubmit}>
-            <div
-            onClick={() => {document.getElementById("doc").click()}}
-            className="w-full aspect-square border-2 border-dashed border-[#1475cf] flex flex-col justify-center items-center">
-
-              <MdCloudUpload color='#1475cf' size={100} />
-              <label htmlFor="doc" className="text-black text-xl">Select file</label>
-              <input className="hidden" id="doc" name="doc" type="file"
-              onInput={onInputFile}/>
-
-              <p className="filename my-4 px-2 text-center text-gray-500 w-full overflow-hidden text-ellipsis">No file chosen</p>
-            </div>
-
-            <Button className="mt-10" fullWidth type="submit">Upload</Button>
-          </form>
-        </div> */}
         <Form setDocAvailability={setDocAvailability} setDocs={setDocs} docs={docs} areDocsAvailable={areDocsAvailable} />
 
         <div className="available-docs mx-4 py-4 overflow-auto">
