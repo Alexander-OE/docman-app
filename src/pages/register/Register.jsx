@@ -76,6 +76,7 @@ export function Register() {
         let data = await response.json()
         console.log("Data:", data)
         setAllDepartments(data.departments)
+        localStorage.setItem("departments", allDepartments)
       }
       else{
         console.log("Response:", response)

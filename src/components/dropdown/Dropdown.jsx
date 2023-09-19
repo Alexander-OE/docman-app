@@ -2,15 +2,17 @@ import { useState } from "react"
 
 export default function Dropdown({label, choices, setChoice}){
     const [selected, setSelected] = useState(label)
+    const [parent, setParent] = useState(null)
 
-    const chooseAction = () => {
-        if (document.querySelector(".dropdown-content").classList.contains("hidden")){
-            openDropdown()
-        }
-        else{
-            closeDropdown()
-        }
-    }
+    // const chooseAction = (event) => {
+    //     if (document.querySelector(".dropdown-content").classList.contains("hidden")){
+    //         setParent(event.target.parentElement)
+    //         openDropdown()
+    //     }
+    //     else{
+    //         closeDropdown()
+    //     }
+    // }
 
     const set = (choice) => {
         setChoice(choice)
@@ -19,16 +21,17 @@ export default function Dropdown({label, choices, setChoice}){
     }
 
     const closeDropdown = () => {
-        document.querySelector(".dropdown-content").classList.add("hidden")
-        document.querySelector(".label").classList.remove("hidden")
-        let choicename = document.querySelector(".choice-name")
+        parent.querySelector(".dropdown-content").classList.add("hidden")
+        parent.querySelector(".label").classList.remove("hidden")
+        let choicename = parent.querySelector(".choice-name")
         choicename.classList.add("bg-chevron-down")
         choicename.classList.remove("bg-chevron-up")
     }
     
-    const openDropdown = () => {
-        let dropdown = document.querySelector(".dropdown-content")
-        let choice = document.querySelector(".choice-name")
+    const openDropdown = (event) => {
+        setParent(event.target.parentElement)
+        let dropdown = parent.querySelector(".dropdown-content")
+        let choice = parent.querySelector(".choice-name")
         choice.classList.remove("bg-chevron-down")
         choice.classList.add("bg-chevron-up")
         dropdown.classList.remove("hidden")
@@ -36,7 +39,7 @@ export default function Dropdown({label, choices, setChoice}){
     return(
         <>
         <div className="drop-disp relative hover:cursor-pointer">
-            <p onClick={chooseAction} className="p-3 border-[1px] border-blue-gray-200 rounded-md text-blue-gray-700 choice-name bg-chevron-down bg-sm bg-no-repeat bg-[95%]">{selected}</p>
+            <p onClick={openDropdown} className="p-3 border-[1px] border-blue-gray-200 rounded-md text-blue-gray-700 choice-name bg-chevron-down bg-sm bg-no-repeat bg-[95%] opacity-90 text-sm">{selected}</p>
 
             <label className="label hidden text-[11px] absolute -top-1.5 left-3 px-1 bg-white">{label}</label>
 
