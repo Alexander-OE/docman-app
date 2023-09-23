@@ -42,8 +42,6 @@ const Admin = () => {
 
     console.log("Successfully gotten users!")
   }
-
-  
   
   async function getAllDocs() {
     let requestOptions = {
