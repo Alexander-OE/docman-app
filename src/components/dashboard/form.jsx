@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
 import { MdCloudUpload } from "react-icons/md";
-import { Button } from "@material-tailwind/react";
+import { Button, Input, Textarea } from "@material-tailwind/react";
 import Dropdown from "../dropdown/Dropdown";
+import Permission from "./permission";
 import endpoint from "../../assets/endpoint.json"
 
 const url = endpoint.url
@@ -12,6 +13,8 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
   const [category, setCategory] = useState("")
   const [allCategories, setAllCategories] = useState([])
   const [users, setUsers] = useState([])
+  const [userPermissions, setUserPermissions] = useState(null)
+  const [deptPermissions, setDeptPermissions] = useState(null)
 
   const onInputFile = () => {
         const file = document.querySelector("#doc").value.split("\\")
@@ -165,8 +168,12 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
       let response = await fetch(`${url}/users`, requestOptions)
       if (response.status === 200){
         let data = await response.json()
-        setUsers(data.users)
-        console.log(data.users)
+        let modData = data.users
+        modData.forEach(user => {
+          user.name = `${user.firstName},${user.lastName.toUpperCase()}`
+        })
+        setUsers(modData)
+        console.log(users)
       }
       else{
         console.log("Response:", response)
@@ -177,13 +184,32 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
 
     console.log("Successfully gotten users!")
   }
+
+  const getCategories = async () => {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    }
+
+    try{
+      const response = await fetch(`${url}/category`, requestOptions)
+      if(response.status === 200){
+        const data = await response.json()
+        setAllCategories(data.categories)
+        console.log("Categories:", data.categories)
+      }
+    }
+    catch(error){
+      console.log("Category error:", error)
+      setAllCategories([])
+    }
+  }
     
   useEffect(() => {
     checkForDocs()
     getDepartments()
     getRegisteredUsers()
-    users.forEach(user => {user.name = `${user.firstName},${user.lastName.toUpperCase()}`})
-    setUsers(users)
+    getCategories()
   }, [])
 
     return(
@@ -213,57 +239,29 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
 
           <div className="mx-auto my-3 max-w-sm">
             <p className="my-2 text-blue-gray-800 font-bold">Category:</p>
-            <Dropdown label="Category" choices={[{"name": "Assignment", "_id": "9983475"}]} setChoice={setCategory}/>
+            <Dropdown label="Category" choices={allCategories} setChoice={setCategory}/>
           </div>
 
           <h3 className="text-2xl text-center text-blue-gray-800 font-bold my-5 mx-4">Permissions</h3>
 
           <h4 className="text-xl text-blue-gray-800 font-bold my-5 px-4 max-w-5xl sm:m-auto">Department Permissions:</h4>
-          <Permission label="Department" targets={allDept}/>
+          <Permission label="Department" targets={allDept} setPermissions={setDeptPermissions}/>
 
           <h4 className="text-xl text-blue-gray-800 font-bold my-5 px-4 max-w-5xl sm:m-auto">User Permissions:</h4>
-          <Permission label="Department" targets={users}/>
+          <Permission label="Department" targets={users} setPermissions={setUserPermissions}/>
 
-          
+          <div className="mx-auto max-w-5xl my-4 px-4">
+           <h4 className="text-xl text-blue-gray-800 font-bold my-5 max-w-5xl sm:m-auto">Description:</h4>
+            <Input size="lg" type="text" label="Description"/>
+          </div>
+
+          <div className="mx-auto max-w-5xl my-4 px-4">
+           <h4 className="text-xl text-blue-gray-800 font-bold my-5 max-w-5xl sm:m-auto">Comment:</h4>
+            <Textarea size="lg" label="Comment"/>
+          </div>
 
           <Button className="mt-10 mx-auto max-w-sm" fullWidth type="submit">Upload</Button>
         </form>
         </>
     )
-}
-
-function Permission({label, targets, setPermissions}){
-  useEffect(() => console.log("targets:",targets), [])
-  return(
-    <>
-    <div className="m-auto my-4 max-w-5xl">
-      <div className="mx-4 border-blue-gray-100 border-2 border-separate rounded-2xl overflow-hidden">
-        <table className="m-auto w-full max-w-5xl">
-          <thead>
-            <tr className="bg-blue-gray-50 border-blue-gray-100 border-b-[1px] text-blue-gray-600 font-bold text-center">
-              <td className="p-3">{label}</td>
-              <td className="p-3">Forbidden</td>
-              <td className="p-3">Read</td>
-              <td className="p-3">Write</td>
-              <td className="p-3">Admin</td>
-            </tr>
-          </thead>
-          
-          <tbody>
-            {targets.map(target => 
-              <tr className="border-b-[1px] border-blue-gray-100 text-center" key={target.createdAt}>
-                <td className="p-3">{target.name}</td>
-                <td className="p-3"><input name={target.name} className="w-full hover:cursor-pointer" type="radio"/></td>
-                <td className="p-3"><input name={target.name} className="w-full hover:cursor-pointer" type="radio"/></td>
-                <td className="p-3"><input name={target.name} className="w-full hover:cursor-pointer" type="radio"/></td>
-                <td className="p-3"><input name={target.name} className="w-full hover:cursor-pointer" type="radio"/></td>
-              </tr>
-              
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
-    </>
-  )
 }
