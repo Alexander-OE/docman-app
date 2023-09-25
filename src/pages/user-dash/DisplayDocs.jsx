@@ -1,13 +1,44 @@
 import DisplayPdf from "./DisplayPdf"
+import { useAuth } from "../context/AuthContext"
 import { useState, useEffect } from "react"
+import endpoint from "../../assets/endpoint.json"
 import "./Userdash.css"
 
-export default function DisplayDocs({isDocs, docs}){
-    const [path, setPath] = useState("https://google.com")
-    const changePath = (path) => {setPath(path)}
-    const Docs = docs? docs : []
+const url = endpoint.url
 
-    useEffect(() => {console.log("Refreshed")}, [isDocs])
+export default function DisplayDocs({reload}){
+    const {user} = useAuth()
+    const [path, setPath] = useState("https://google.com")
+    const [docs, setDocs] = useState([])
+    const [isDocs, setIsDocs] = useState(!!docs)
+    const changePath = (path) => {setPath(path)}
+
+    const getDocs = async() => {
+        const requestOptions = {
+            method: "GET",
+            redirect: "follow",
+            headers: {
+                authorization: `Bearer ${user.accessToken} backend`
+            }
+        }
+
+        try{
+            let response = await fetch(`${url}/getAllDocs`, requestOptions)
+            if (response.status === 200){
+                let data = await response.json()
+                setDocs(data.Documents)
+                setIsDocs(!!data.Documents)
+            }
+            else{
+                console.log("An error occured while retrieving documents. Error code", response.status)
+            }
+        }
+        catch(error){
+            console.log("error", error)
+        }
+    }
+
+    useEffect(() => {getDocs()}, [reload])
     
     return(
         <div>
@@ -22,7 +53,7 @@ export default function DisplayDocs({isDocs, docs}){
                 </thead>
 
                 <tbody>
-                {isDocs && Docs.map(doc => 
+                {isDocs && docs.map(doc => 
                     <TableRow key={doc._id} doc={doc} setPath={changePath}/>
                 )}
                 </tbody>

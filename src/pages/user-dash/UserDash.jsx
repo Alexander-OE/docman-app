@@ -6,43 +6,12 @@ import DisplayDocs from "./DisplayDocs";
 import DashboardHead from "../../components/dashboard/header";
 import Loader from '../../components/loader/Loader'
 import "./Userdash.css"
-import endpoint from "../../assets/endpoint.json"
-
-const url = endpoint.url
 
 const UserDash = () => {
-  const { user } = useAuth();
   
   const [areDocsAvailable, setDocAvailability] = useState(false)
   const [docs, setDocs] = useState(null)
-  
-  async function getAllDocs() {
-    let requestOptions = {
-      method: 'GET',
-      redirect: 'follow',
-      headers: {
-        authorization: `Bearer ${user.accessToken} backend`
-      }
-    }
-  
-    try{
-      let response = await fetch(`${url}/getAllDocs`,requestOptions)
-      if (response.status == 201){
-        let data = await response.json()
-        sessionStorage.setItem("docs", JSON.stringify(data.Documents))
-        setDocs(JSON.parse(sessionStorage.getItem("docs")))
-      }
-      else{
-        console.log("Fetch documents failed!")
-      }
-    }
-    catch(error){console.log("error:", error)}
-  }
-  
-  useEffect(() => {
-    getAllDocs()
-    console.log(user)
-  }, [])
+  const [reload, setReload] = useState(false)
 
   return (
     <section className="w-full min-h-screen relative box-border">
@@ -53,14 +22,14 @@ const UserDash = () => {
       <div className="board ml-auto flex-grow z-10">
         <DashboardHead/>
 
-        <Form setDocAvailability={setDocAvailability} setDocs={setDocs} areDocsAvailable={areDocsAvailable} />
+        <Form setDocAvailability={setDocAvailability} setDocs={setDocs} areDocsAvailable={areDocsAvailable} setSuccess={setReload}/>
 
         <div className="available-docs mx-4 py-4 overflow-auto">
           <h2 className="text-4xl text-blue-gray-800 font-bold my-5">Available documents</h2>
 
           {areDocsAvailable ? 
           
-          <div className="border-blue-gray-100 border-[1px] rounded-2xl overflow-hidden border-separate my-5"><DisplayDocs isDocs={areDocsAvailable} docs={docs}/></div> : 
+          <div className="border-blue-gray-100 border-[1px] rounded-2xl overflow-hidden border-separate my-5"><DisplayDocs reload={reload}/></div> : 
 
           <div>
             <p>No documents currently available!</p>  

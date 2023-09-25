@@ -8,7 +8,7 @@ import { useAuth } from "../../pages/context/AuthContext";
 
 const url = endpoint.url
 
-export default function Form({setDocAvailability, setDocs, areDocsAvailable}){
+export default function Form({setDocAvailability, setDocs, areDocsAvailable, setSuccess}){
   const {user} = useAuth()
   const [department, setDepartment] = useState("")
   const [allDept, setAllDept] = useState([])
@@ -24,28 +24,9 @@ export default function Form({setDocAvailability, setDocs, areDocsAvailable}){
         document.querySelector(".filename").innerHTML = name? name: "No file chosen"
     }
 
-  const getDocs = async () => {
-        let requestOptions = {
-          method: "GET",
-          redirect: "follow",
-          headers: {
-            authorization: user.accessToken
-          }
-        }
-        let response = await fetch(`${url}/getAllDocs`, requestOptions)
-        if (response.status === 201){
-          let data = await response.json()
-          sessionStorage.clear()
-          sessionStorage.setItem("docs", JSON.stringify(data.Documents))
-          checkForDocs()
-        }
-    
-    }
-
   const onsubmit = async (event) => {
     event.preventDefault()
     const filename = document.querySelector(".filename").innerHTML
-    console.log(filename)
     
     if (filename == "No file chosen"){
       console.log("Select valid file")
@@ -53,7 +34,6 @@ export default function Form({setDocAvailability, setDocs, areDocsAvailable}){
     
     else{
       document.querySelector(".loading").classList.remove("hidden")
-      console.log('token:',user.accessToken)
         //   console.log(user.email)
     
       const fileInput = document.getElementById("doc")
@@ -93,13 +73,11 @@ export default function Form({setDocAvailability, setDocs, areDocsAvailable}){
           authorization: `Bearer ${user.accessToken} backend`
         }
       };
-
-      console.log(data)
     
       try{
         let response = await fetch(`${url}/upload`, requestOptions)
         if (response.status == 201){
-          getDocs()
+          setSuccess(true)
           alert("Uploaded successfully")
           document.getElementById("doc").value = null
           onInputFile()
