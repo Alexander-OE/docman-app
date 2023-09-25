@@ -45,6 +45,8 @@ export function Login() {
       const firstname = response.data.firstName
       const email = response.data.email
 
+
+
       console.log(response);
       console.log("This is the token: " + accessToken);
 
@@ -62,11 +64,8 @@ export function Login() {
         alert("Unable to login. Please try after some time.");
         return;
       }
-      localStorage.clear();
-      localStorage.setItem("user-token", accessToken);
-      localStorage.setItem("docs", JSON.stringify(docs))
-      localStorage.setItem("firstname", firstname)
-      localStorage.setItem("email", email)
+      sessionStorage.clear()
+      sessionStorage.setItem("docs", JSON.stringify(docs))
 
       setTimeout(() => {
         navigate("/user");

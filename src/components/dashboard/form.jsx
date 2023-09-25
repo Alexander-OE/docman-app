@@ -4,10 +4,12 @@ import { Button, Input, Textarea } from "@material-tailwind/react";
 import Dropdown from "../dropdown/Dropdown";
 import Permission from "./permission";
 import endpoint from "../../assets/endpoint.json"
+import { useAuth } from "../../pages/context/AuthContext";
 
 const url = endpoint.url
 
-export default function Form({setDocAvailability, setDocs, docs, areDocsAvailable}){
+export default function Form({setDocAvailability, setDocs, areDocsAvailable}){
+  const {user} = useAuth()
   const [department, setDepartment] = useState("")
   const [allDept, setAllDept] = useState([])
   const [category, setCategory] = useState("")
@@ -27,97 +29,115 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
           method: "GET",
           redirect: "follow",
           headers: {
-            authorization: localStorage.getItem("user-token")
+            authorization: user.accessToken
           }
         }
         let response = await fetch(`${url}/getAllDocs`, requestOptions)
         if (response.status === 201){
           let data = await response.json()
-          localStorage.setItem("docs", JSON.stringify(data.Documents))
+          sessionStorage.clear()
+          sessionStorage.setItem("docs", JSON.stringify(data.Documents))
           checkForDocs()
         }
     
     }
 
   const onsubmit = async (event) => {
-        event.preventDefault()
-        const filename = document.querySelector(".filename").innerHTML
-        console.log(filename)
+    event.preventDefault()
+    const filename = document.querySelector(".filename").innerHTML
+    console.log(filename)
     
-        if (filename == "No file chosen"){
-          console.log("Select valid file")
-        }
+    if (filename == "No file chosen"){
+      console.log("Select valid file")
+    }
     
-        else{
-          document.querySelector(".loading").classList.remove("hidden")
-          console.log('token:',localStorage.getItem('user-token'))
+    else{
+      document.querySelector(".loading").classList.remove("hidden")
+      console.log('token:',user.accessToken)
         //   console.log(user.email)
     
-          const fileInput = document.getElementById("doc")
-          const file = fileInput.files[0]
+      const fileInput = document.getElementById("doc")
+      const file = fileInput.files[0]
     
-          let data = new FormData();
-          data.append('file', file, "[PROXY]");
-          data.append('writeAccess[]', `${localStorage.getItem("email")}`);
-          data.append('readAccess[]', `${localStorage.getItem("email")}`);
-          data.append('deleteAccess[]', `${localStorage.getItem("email")}`);
-          data.append('name', `${filename}`);
-          data.append('writeAccess[]', `${localStorage.getItem("email")}`);
-          data.append('readAccess[]', `${localStorage.getItem("email")}`);
-    
-          let requestOptions = {
-            method: 'POST',
-            body: data,
-            redirect: 'follow',
-            headers: {
-              authorization: `Bearer ${localStorage.getItem("user-token")} backend`
-            }
-          };
+      let data = new FormData();
+      data.append('file', file, "[PROXY]");
+      data.append('name', `${filename}`);
+      data.append('readAccess[]', user.email)
+      data.append('writeAccess[]', user.email)
+      data.append('deleteAccess[]', user.email)
+      data.append('departmentReadAccess[]', department)
+      data.append('departmentWriteAccess[]', department)
+      data.append('departmentDeleteAccess[]', department)
+      data.append('categoryName', category)
+      data.append('departmentName', department)
 
-          console.log(data)
-    
-          try{
-            let response = await fetch(`${url}/upload`, requestOptions)
-            if (response.status == 201){
-              alert("Uploaded successfully")
-              document.getElementById("doc").value = null
-              onInputFile()
-              getDocs()
-            }
-    
-            else if (response.status == 401){
-              const data = await response.json()
-              console.log("401-message:", data.message)
-            }
+      if (userPermissions !== null){
+        userPermissions.read.forEach(email => {data.append('readAccess[]', email)})
+        userPermissions.write.forEach(email => data.append('writeAccess[]', email))
+        userPermissions.forbidden.forEach(email => data.append('forbiddenUsers[]', email))
+        userPermissions.delete.forEach(email => data.append('deleteAccess[]', email))
+      }
 
-            else if (response.status == 403){
-              alert("Not an admin, cannot upload documents")
-            }
+      if (deptPermissions !== null){
+        deptPermissions.read.forEach(email => {data.append('departmentReadAccess[]', email)})
+        deptPermissions.write.forEach(email => data.append('departmentWriteAccess[]', email))
+        deptPermissions.forbidden.forEach(email => data.append('forbiddenDepartments[]', email))
+        deptPermissions.delete.forEach(email => data.append('departmentDeleteAccess[]', email))
+      }
+    
+      let requestOptions = {
+        method: 'POST',
+        body: data,
+        redirect: 'follow',
+        headers: {
+          authorization: `Bearer ${user.accessToken} backend`
+        }
+      };
+
+      console.log(data)
+    
+      try{
+        let response = await fetch(`${url}/upload`, requestOptions)
+        if (response.status == 201){
+          getDocs()
+          alert("Uploaded successfully")
+          document.getElementById("doc").value = null
+          onInputFile()
+        }
+    
+        else if (response.status == 401){
+          const data = await response.json()
+          console.log("401-message:", data.message)
+        }
+
+        else if (response.status == 403){
+          alert("Not an admin, cannot upload documents")
+        }
             
-            else if (response.status == 503){
-                alert("Service unavailable, try again later!")
-            }
+        else if (response.status == 503){
+            alert("Service unavailable, try again later!")
+        }
 
-            else{
-              alert("Upload failed. Try again")
-            }
-    
-          }
-          catch (error) {
-            console.log("error:", error)
-            alert("Something went wrong. Contact our support or try again later!")
+        else{
+          alert("Upload failed. Try again")
         }
-          finally{
-            console.log("Done!")
-            document.querySelector(".loading").classList.add("hidden")
-          }
     
-        }
+      }
+      catch (error) {
+        console.log("error:", error)
+        alert("Something went wrong. Contact our support or try again later!")
+    }
+      finally{
+        console.log("Done!")
+        document.querySelector(".loading").classList.add("hidden")
+      }
+    
+    }
     }
 
   const checkForDocs = () => {
-        let documents = JSON.parse(localStorage.getItem("docs"))
-        if (documents.length > 1){
+        let documents = JSON.parse(sessionStorage.getItem("docs"))
+        if (documents.length > 0){
           setDocAvailability(true)
           setDocs(documents)
         }
@@ -140,7 +160,6 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
     try{
       if (response.status === 200){
         let data = await response.json()
-        console.log("My depts:",data.departments)
         setAllDept(data.departments)
       }
       else{
@@ -158,11 +177,9 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
       method: "GET",
       redirect: "follow",
       headers:{
-        authorization: `Bearer ${localStorage.getItem("user-token")} backend`
+        authorization: `Bearer ${user.accessToken} backend`
       }
     }
-
-    console.log("Token",requestOptions.headers.authorization)
 
     try{
       let response = await fetch(`${url}/users`, requestOptions)
@@ -173,7 +190,6 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
           user.name = `${user.firstName},${user.lastName.toUpperCase()}`
         })
         setUsers(modData)
-        console.log(users)
       }
       else{
         console.log("Response:", response)
@@ -196,7 +212,6 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
       if(response.status === 200){
         const data = await response.json()
         setAllCategories(data.categories)
-        console.log("Categories:", data.categories)
       }
     }
     catch(error){
@@ -245,12 +260,12 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
           <h3 className="text-2xl text-center text-blue-gray-800 font-bold my-5 mx-4">Permissions</h3>
 
           <h4 className="text-xl text-blue-gray-800 font-bold my-5 px-4 max-w-5xl sm:m-auto">Department Permissions:</h4>
-          <Permission label="Department" targets={allDept} setPermissions={setDeptPermissions}/>
+          <Permission label="Department" targets={allDept} setPermissions={setDeptPermissions} exception={department}/>
 
           <h4 className="text-xl text-blue-gray-800 font-bold my-5 px-4 max-w-5xl sm:m-auto">User Permissions:</h4>
           <Permission label="Department" targets={users} setPermissions={setUserPermissions}/>
 
-          <div className="mx-auto max-w-5xl my-4 px-4">
+          {/* <div className="mx-auto max-w-5xl my-4 px-4">
            <h4 className="text-xl text-blue-gray-800 font-bold my-5 max-w-5xl sm:m-auto">Description:</h4>
             <Input size="lg" type="text" label="Description"/>
           </div>
@@ -258,7 +273,7 @@ export default function Form({setDocAvailability, setDocs, docs, areDocsAvailabl
           <div className="mx-auto max-w-5xl my-4 px-4">
            <h4 className="text-xl text-blue-gray-800 font-bold my-5 max-w-5xl sm:m-auto">Comment:</h4>
             <Textarea size="lg" label="Comment"/>
-          </div>
+          </div> */}
 
           <Button className="mt-10 mx-auto max-w-sm" fullWidth type="submit">Upload</Button>
         </form>

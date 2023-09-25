@@ -17,7 +17,7 @@ export function Sidebar() {
   const navigate = useNavigate();
 
   const logOutBtn = () => {
-    localStorage.removeItem("user-token");
+    sessionStorage.removeItem("user-token");
     navigate("/signin");
   };
 
