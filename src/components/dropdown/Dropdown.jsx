@@ -2,7 +2,7 @@ import { useState } from "react"
 
 export default function Dropdown({label, choices, setChoice}){
     const [selected, setSelected] = useState(label)
-    const [parent, setParent] = useState(null)
+    const [isOpen, setOpen] = useState(false)
 
     // const chooseAction = (event) => {
     //     if (document.querySelector(".dropdown-content").classList.contains("hidden")){
@@ -21,21 +21,13 @@ export default function Dropdown({label, choices, setChoice}){
     }
 
     const closeDropdown = () => {
-        parent.querySelector(".dropdown-content").classList.add("hidden")
-        parent.querySelector(".label").classList.remove("hidden")
-        let choicename = parent.querySelector(".choice-name")
-        choicename.classList.add("bg-chevron-down")
-        choicename.classList.remove("bg-chevron-up")
+        setOpen(false)
     }
     
     const openDropdown = (event) => {
-        setParent(event.target.parentElement)
-        let dropdown = parent.querySelector(".dropdown-content")
-        let choice = parent.querySelector(".choice-name")
-        choice.classList.remove("bg-chevron-down")
-        choice.classList.add("bg-chevron-up")
-        dropdown.classList.remove("hidden")
+        isOpen? setOpen(false) : setOpen(true)
     }
+
     return(
         <>
         <div className="drop-disp relative hover:cursor-pointer">
@@ -43,11 +35,11 @@ export default function Dropdown({label, choices, setChoice}){
 
             <label className="label hidden text-[11px] absolute -top-1.5 left-3 px-1 bg-white">{label}</label>
 
-            <ul className="absolute hidden w-full mt-1 border-[1px] border-blue-gray-200 rounded-md bg-white z-40 dropdown-content shadow-lg">
+            {isOpen && <ul className="absolute w-full mt-1 border-[1px] border-blue-gray-200 rounded-md bg-white z-40 dropdown-content shadow-lg">
                 {choices.map(choice => 
                     <li key={choice._id} className="p-3 hover:bg-blue-gray-600 hover:text-white rounded-md" onClick={() => {set(choice.name)}}>{choice.name}</li>    
                 )}
-            </ul>
+            </ul>}
         </div>
         </>
     )

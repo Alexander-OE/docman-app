@@ -4,6 +4,8 @@ import DisplayUsers from "./DisplayUsers";
 import { Sidenav } from "../../components/sidenav/Sidenav";
 import DashboardHead from "../../components/dashboard/header";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import Loader from "../../components/loader/Loader";
 import endpoint from "../../assets/endpoint.json"
 // import test from '../user-dash/test.json'
@@ -11,7 +13,8 @@ import endpoint from "../../assets/endpoint.json"
 // const user = test.users
 const url = endpoint.url
 const Admin = () => {
-
+  const {user} = useAuth()
+  const navigate = useNavigate()
   const [areDocsAvailable, setDocAvailability] = useState(true)
   const [docs, setDocs] = useState(null)
   const [users, setUsers] = useState([])
@@ -21,7 +24,7 @@ const Admin = () => {
       method: "GET",
       redirect: "follow",
       headers:{
-        authorization: `Bearer ${localStorage.getItem("user-token")} backend`
+        authorization: `Bearer ${user.accessToken} backend`
       }
     }
 
@@ -48,7 +51,7 @@ const Admin = () => {
       method: 'GET',
       redirect: 'follow',
       headers: {
-        authorization: `Bearer ${localStorage.getItem("user-token")} backend`
+        authorization: `Bearer ${user.accessToken} backend`
       }
     }
   
@@ -56,9 +59,8 @@ const Admin = () => {
       let response = await fetch(`${url}/getAllDocs`,requestOptions)
       if (response.status == 201){
         let data = await response.json()
-        localStorage.setItem("docs", JSON.stringify(data.Documents))
-        setDocs(JSON.parse(localStorage.getItem("docs")))
-        console.log(localStorage.getItem('docs'))
+        sessionStorage.setItem("docs", JSON.stringify(data.Documents))
+        setDocs(JSON.parse(sessionStorage.getItem("docs")))
       }
       else{
         console.log("Fetch documents failed!")
@@ -68,6 +70,10 @@ const Admin = () => {
   }
 
   useEffect(() => {
+    if (user.role != "admin"){
+      alert("Not an admin! Cannot access target page!")
+      navigate("/user")
+    }
     getRegisteredUsers()
     getAllDocs()
   }, [])
@@ -81,7 +87,7 @@ const Admin = () => {
       <div className="board ml-auto flex-grow z-10">
         <DashboardHead/>
         
-        <Form setDocAvailability={setDocAvailability} setDocs={setDocs} docs={docs} areDocsAvailable={areDocsAvailable} />
+        <Form setDocAvailability={setDocAvailability} setDocs={setDocs} areDocsAvailable={areDocsAvailable} />
 
         {/* Available Documents */}
         <div className="available-docs mx-4 py-4 overflow-auto">

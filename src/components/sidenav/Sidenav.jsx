@@ -12,12 +12,15 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../pages/context/AuthContext";
 
 export function Sidenav() {
+  const {logout} = useAuth()
   const navigate = useNavigate();
 
   const logOutBtn = () => {
-    localStorage.removeItem("user-token");
+    sessionStorage.clear();
+    logout()
     navigate("/");
   };
 
@@ -33,7 +36,7 @@ export function Sidenav() {
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Dashboard
+          Documents
         </ListItem>
 
         <ListItem onClick={() => {navigate('/admin')}}>

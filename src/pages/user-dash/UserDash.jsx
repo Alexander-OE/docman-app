@@ -21,7 +21,7 @@ const UserDash = () => {
       method: 'GET',
       redirect: 'follow',
       headers: {
-        authorization: `Bearer ${localStorage.getItem("user-token")} backend`
+        authorization: `Bearer ${user.accessToken} backend`
       }
     }
   
@@ -29,8 +29,8 @@ const UserDash = () => {
       let response = await fetch(`${url}/getAllDocs`,requestOptions)
       if (response.status == 201){
         let data = await response.json()
-        localStorage.setItem("docs", JSON.stringify(data.Documents))
-        setDocs(JSON.parse(localStorage.getItem("docs")))
+        sessionStorage.setItem("docs", JSON.stringify(data.Documents))
+        setDocs(JSON.parse(sessionStorage.getItem("docs")))
       }
       else{
         console.log("Fetch documents failed!")
@@ -39,7 +39,10 @@ const UserDash = () => {
     catch(error){console.log("error:", error)}
   }
   
-  useEffect(() => {getAllDocs()}, [])
+  useEffect(() => {
+    getAllDocs()
+    console.log(user)
+  }, [])
 
   return (
     <section className="w-full min-h-screen relative box-border">
@@ -50,7 +53,7 @@ const UserDash = () => {
       <div className="board ml-auto flex-grow z-10">
         <DashboardHead/>
 
-        <Form setDocAvailability={setDocAvailability} setDocs={setDocs} docs={docs} areDocsAvailable={areDocsAvailable} />
+        <Form setDocAvailability={setDocAvailability} setDocs={setDocs} areDocsAvailable={areDocsAvailable} />
 
         <div className="available-docs mx-4 py-4 overflow-auto">
           <h2 className="text-4xl text-blue-gray-800 font-bold my-5">Available documents</h2>

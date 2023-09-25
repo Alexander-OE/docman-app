@@ -74,9 +74,8 @@ export function Register() {
       let response = await fetch(`${url}/departments`, requestOptions)
       if (response.status === 200){
         let data = await response.json()
-        console.log("Data:", data)
         setAllDepartments(data.departments)
-        localStorage.setItem("departments", allDepartments)
+        sessionStorage.setItem("departments", allDepartments)
       }
       else{
         console.log("Response:", response)
