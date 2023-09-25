@@ -45,11 +45,6 @@ export function Login() {
       const firstname = response.data.firstName
       const email = response.data.email
 
-
-
-      console.log(response);
-      console.log("This is the token: " + accessToken);
-
       // Save the token in your authentication context or state.
       // This may vary depending on your authentication logic.
       // For example, if you're using a context-based authentication:
