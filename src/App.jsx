@@ -5,7 +5,7 @@ import { Login } from "./pages/login/Login";
 import Admin from "./pages/admin/Admin";
 import UserDash from "./pages/user-dash/UserDash";
 import ProtectedRoute from "./pages/ProtectedRoute";
-import Manage from "./pages/manage/manage";
+import Manage from "./pages/manage/Manage";
 
 function App() {
   return (
