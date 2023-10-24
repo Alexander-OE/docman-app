@@ -5,6 +5,7 @@ import { Login } from "./pages/login/Login";
 import Admin from "./pages/admin/Admin";
 import UserDash from "./pages/user-dash/UserDash";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import Manage from "./pages/manage/manage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/" element={<Login />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/manage" element={<Manage/>} />
       {/* Protected user route below */}
       <Route
         path="/user"
