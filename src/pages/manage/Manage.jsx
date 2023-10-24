@@ -4,6 +4,7 @@ import DashboardHead from "../../components/dashboard/header"
 import { Input, Button } from "@material-tailwind/react"
 import { useState, useEffect } from "react"
 import DisplayDocs from "../user-dash/DisplayDocs"
+import DisplayUsers from "./DisplayUsers"
 import { useAuth } from "../context/AuthContext"
 import endpoint from "../../assets/endpoint.json"
 
@@ -116,9 +117,17 @@ export default function Manage(){
                 <div className="text-lg columns-2 colum mx-auto max-w-5xl">
                     <ul>
                     {categories != null && categories.map(category => 
-                    <li className="my-1 list-disc">{category.name}</li>
+                    <li key={category.name} className="my-1 list-disc">{category.name}</li>
                     )}
                     </ul>
+                </div>
+            </div>
+
+            <div className="available-docs mx-4 py-4 overflow-auto">
+                <h2 className="text-4xl text-blue-gray-800 font-bold my-5">Manage Users</h2>
+                
+                <div className="border-blue-gray-100 border-[1px] rounded-2xl overflow-hidden border-separate my-5 max-w-7xl mx-auto">
+                    <DisplayUsers reload={reload}/>
                 </div>
             </div>
         </div>
