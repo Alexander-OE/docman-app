@@ -6,7 +6,7 @@ import "./Userdash.css"
 
 const url = endpoint.url
 
-export default function DisplayDocs({reload}){
+export default function DisplayDocs({reload, filter = ''}){
     const {user} = useAuth()
     const [path, setPath] = useState("https://google.com")
     const [docs, setDocs] = useState([])
@@ -53,7 +53,7 @@ export default function DisplayDocs({reload}){
                 </thead>
 
                 <tbody>
-                {isDocs && docs.map(doc => 
+                {isDocs && docs.filter(item => item.name.toLowerCase().includes(filter.toLowerCase())).map(doc => 
                     <TableRow key={doc._id} doc={doc} setPath={changePath}/>
                 )}
                 </tbody>

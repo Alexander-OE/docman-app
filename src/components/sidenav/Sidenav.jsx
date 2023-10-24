@@ -46,12 +46,13 @@ export function Sidenav() {
           Admin
         </ListItem>
 
-        {/* <ListItem>
+        <ListItem onClick={() => {navigate('/manage')}}>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Settings
-        </ListItem> */}
+          Manage
+        </ListItem>
+
         <ListItem onClick={logOutBtn}>
           <ListItemPrefix >
             <PowerIcon className="h-5 w-5" />
