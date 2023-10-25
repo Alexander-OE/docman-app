@@ -62,6 +62,9 @@ export default function Manage(){
                 else if (response.status == 400) alert('Category must have unique names')
             }
             catch(err){console.log("Error occured creating category:", err)}
+            finally{
+                setName('')
+            }
         }
     }
 
@@ -111,7 +114,7 @@ export default function Manage(){
                 <h2 className="text-4xl text-blue-gray-800 font-bold my-5">Create Category</h2>
 
                 <div className="mx-auto my-3 max-w-sm">
-                    <Input onChange={(e) => setName(e.target.value)} className="search-txt" type="text" size="lg" label="Category name..."/>
+                    <Input value={name} onChange={(e) => setName(e.target.value)} className="search-txt" type="text" size="lg" label="Category name..."/>
                     <Button className="mt-6" fullWidth type="button" onClick={handleCreate}>
                         Create
                     </Button>
