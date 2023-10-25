@@ -42,10 +42,10 @@ export default function DisplayUsers({reload, filter = ''}){
     useEffect(() => {getRegisteredUsers()}, [reload])
     
     return(
-        <div>
+        <div className="relative max-h-[450px] overflow-y-scroll">
             <table className="w-full">
                 <thead>
-                    <tr className="py-3 h-10 bg-blue-gray-50 border-b border-blue-gray-100 text-blue-gray-600">
+                    <tr className="py-3 h-10 bg-blue-gray-50 border-b border-blue-gray-100 text-blue-gray-600 sticky top-0">
                         <th className="px-3">First Name</th>
                         <th className="px-3">Last Name</th>
                         <th className="px-3">Email</th>

@@ -99,15 +99,18 @@ export default function Manage(){
                 <h2 className="text-4xl text-blue-gray-800 font-bold my-5">Search documents</h2>
 
                 <div className="mx-auto my-3 max-w-sm">
-                    <Input onChange={handleChange} className="search-txt" type="text" size="lg" label="Search..."/>
-                    <Button className="mt-6" fullWidth type="button" onClick={handleSearch}>
+                    <Input onChange={handleSearch} className="search-txt" type="text" size="lg" label="Search..."/>
+                    {/* <Button className="mt-6" fullWidth type="button" onClick={handleSearch}>
                         Start Search
-                    </Button>
+                    </Button> */}
                 </div>
 
-                {view && <div className="border-blue-gray-100 border-[1px] rounded-2xl overflow-hidden border-separate my-5 max-w-7xl mx-auto">
+                {/* {view && <div className="border-blue-gray-100 border-[1px] rounded-2xl overflow-hidden border-separate my-5 max-w-7xl mx-auto">
                     <DisplayDocs reload={reload} filter={filter}/>
-                </div>}
+                </div>} */}
+                <div className="border-blue-gray-100 border-[1px] rounded-2xl overflow-hidden border-separate my-5 max-w-7xl mx-auto">
+                    <DisplayDocs reload={reload} filter={filter}/>
+                </div>
             </div>
 
             <div className="available-docs mx-4 py-4 overflow-auto">

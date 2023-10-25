@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "../../pages/context/AuthContext"
 
 export default function Permission({label, targets, setPermissions, exception}){
@@ -54,6 +54,9 @@ export default function Permission({label, targets, setPermissions, exception}){
         console.log(perms)
         setPermissions(perms)
     }
+    useEffect(()=> {
+      console.log(targets)
+    }, [])
     return(
       <>
       <div className="m-auto my-4 max-w-5xl">
@@ -71,10 +74,10 @@ export default function Permission({label, targets, setPermissions, exception}){
             
             <tbody>
               {targets.filter(filters).map(target => 
-                <tr className="border-b-[1px] border-blue-gray-100 text-center" key={target.createdAt}>
+                <tr className="border-b-[1px] border-blue-gray-100 text-center" key={target._id}>
                   <td className="p-3">{target.name}</td>
                   <td className="p-3"><input onChange={() => {changePerm(target.email||target.name, "forbidden")}} name={target.email || target.name} className="w-full hover:cursor-pointer" type="radio"/></td>
-                  <td className="p-3"><input onChange={() => {changePerm(target.email||target.name, "read")}} name={target.email || target.name} className="w-full hover:cursor-pointer" type="radio"/></td>
+                  <td className="p-3"><input onChange={() => {changePerm(target.email||target.name, "read")}} name={target.email || target.name} className="w-full hover:cursor-pointer" type="radio" checked/></td>
                   <td className="p-3"><input onChange={() => {changePerm(target.email||target.name, "write")}} name={target.email || target.name} className="w-full hover:cursor-pointer" type="radio"/></td>
                   <td className="p-3"><input onChange={() => {changePerm(target.email||target.name, "delete")}} name={target.email || target.name} className="w-full hover:cursor-pointer" type="radio"/></td>
                 </tr>
