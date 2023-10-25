@@ -41,12 +41,14 @@ export default function Manage(){
         }
 
         else{
+            console.log(user)
             const requestOptions = {
                 method: 'POST',
-                body: `{name: ${name}}`,
+                body: JSON.stringify({name:name}),
                 redirect: 'follow',
                 headers: {
-                    authorization: `Bearer ${user.accessToken} backend`
+                    authorization: `Bearer ${user.accessToken} backend`,
+                    'Content-Type': 'application/json'
                 }
             }
 
@@ -56,6 +58,8 @@ export default function Manage(){
                     alert("Successfully created category!")
                     setReload(!reload)
                 }
+
+                else if (response.status == 400) alert('Category must have unique names')
             }
             catch(err){console.log("Error occured creating category:", err)}
         }
