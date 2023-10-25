@@ -64,12 +64,32 @@ export default function DisplayUsers({reload, filter = ''}){
 }
 
 function TableRow({user}){
+
+  const handleDelete = async(mail) => {
+    const requestOptions = {
+      method: 'POST',
+      redirect:'follow',
+      body: JSON.stringify({email: mail}),
+      headers: {
+        authorization: `Bearer ${user.accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    }
+    try{
+      const response = await fetch(`${url}/delete`, requestOptions)
+      if (response.status == 200){
+        alert("Delete Successful!")
+      }
+    }
+    catch(err){console.log("Error deleting user:", err)}
+  }
+
     return(
         <tr className="py-3 px-2 h-10 border-b border-blue-gray-100 text-center text-blue-gray-500">
             <td className="overflow-x-hidden px-2">{user.firstName}</td>
             <td className="overflow-x-hidden px-2">{user.lastName}</td>
             <td className="overflow-x-hidden px-2">{user.email}</td>
-            <td className="overflow-x-hidden px-2 text-red-400 hover:opacity-75 active:opacity-100"><button>Delete</button></td>
+            <td className="overflow-x-hidden px-2 text-red-400 hover:opacity-75 active:opacity-100"><button onClick={() => handleDelete(user.email)}>Delete</button></td>
         </tr>
     )
 }
