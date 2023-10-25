@@ -35,7 +35,7 @@ export default function Dropdown({label, choices, setChoice}){
 
             <label className="label hidden text-[11px] absolute -top-1.5 left-3 px-1 bg-white">{label}</label>
 
-            {isOpen && <ul className="absolute w-full mt-1 border-[1px] border-blue-gray-200 rounded-md bg-white z-40 dropdown-content shadow-lg">
+            {isOpen && <ul className="absolute w-full mt-1 border-[1px] border-blue-gray-200 rounded-md bg-white z-40 dropdown-content shadow-lg max-h-[250px] overflow-y-scroll">
                 {choices.map(choice => 
                     <li key={choice._id} className="p-3 hover:bg-blue-gray-600 hover:text-white rounded-md" onClick={() => {set(choice.name)}}>{choice.name}</li>    
                 )}
